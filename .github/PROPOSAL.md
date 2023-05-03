@@ -34,4 +34,4 @@ The status of the project would be displayed in `overview`, with the following s
 ## Concept
 The idea for this came from a design I made meant for displaying my web apps on my home page. Here's the concept:
 
-<img alt="Concept of how the tracker would look like." src=".github/tracker-concept.png/">
+<img alt="Concept of how the tracker would look like." src="tracker-concept.png">
