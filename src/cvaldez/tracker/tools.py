@@ -3,21 +3,6 @@
 #
 # These are tools for the Project Status Tracker.
 
-# Demo JSON structure for a single project
-demo_structure = {
-    "name": "Project Status Tracker",
-    "description": "View the status of all Carlos’ projects.",
-    "id": 2,
-    "version": "1.0B",
-    "last_updated": 0,
-    "link": None,
-    "icon": "logo.png",
-    "status": 3,
-    "release_notes": [],
-    "process": {"requirements": "", "design": "", "code": ""}
-}
-
-
 class Project:
     def __init__(self, uuid=None, name=None):
         assert uuid or name, "Project.__init__: UUID or name is required to find a project."
