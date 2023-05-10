@@ -24,7 +24,7 @@ class Update:
 
 
 class Project:
-    def __init__(self, uuid=None, name=None):
+    def __init__(self, *, uuid=None, name=None):
         assert uuid or name, "Project.__init__: UUID or name is required to find a project."
 
         p = get_project(uuid=uuid, name=name)
@@ -59,7 +59,7 @@ class Project:
 
             con.commit()
 
-            return Project(count)
+            return Project(uuid=count)
 
     def create_update(self, version: str, release_notes: str) -> Update:
         with psycopg2.connect(os.getenv('DB_LINK')) as con:
@@ -102,7 +102,7 @@ def get_project(uuid=None, name=None) -> tuple:
             cur.execute('SELECT * FROM pst_projects WHERE name=%s;', (name,))
 
         rows = cur.fetchall()
-        if len(rows) == 1:
+        if len(rows) >= 1:
             return rows[0]
         else:
             raise ProjectNotFoundError()

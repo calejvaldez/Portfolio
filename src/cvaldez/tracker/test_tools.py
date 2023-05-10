@@ -1,5 +1,5 @@
 import unittest
-from tools import create_project
+from tools import create_project, Project
 import psycopg2
 import os
 
@@ -11,6 +11,23 @@ class MyTestCase(unittest.TestCase):
         try:
             self.assertEqual((p.name, p.description, p.version, p.link, p.icon, p.status),
                              ('Test', 'This is a test project', None, None, 'building.svg', '1'))
+        finally:
+            with psycopg2.connect(os.getenv("DB_LINK")) as con:
+                cur = con.cursor()
+                cur.execute("DELETE FROM pst_projects WHERE id=%s", (p.id,))
+
+                cur.execute("SELECT * FROM pst_projects WHERE id=%s", (p.id,))
+
+                self.assertEqual(len(cur.fetchall()), 0)
+
+
+    def test_find_project_by_name(self):
+        create_project('Super Cool Project', 'This is a test project')
+        p = Project(name='Super Cool Project')
+
+        try:
+            self.assertEqual((p.name, p.description, p.version, p.link, p.icon, p.status),
+                             ('Super Cool Project', 'This is a test project', None, None, 'building.svg', '1'))
         finally:
             with psycopg2.connect(os.getenv("DB_LINK")) as con:
                 cur = con.cursor()
