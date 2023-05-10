@@ -37,7 +37,7 @@ class Project:
         self.link = p[5]
         self.icon = p[6]
         self.status = p[7]
-        self.release_notes: list = get_updates(p[2])
+        self.release_notes: list[Update] = get_updates(p[2])
         self.process = {
             "requirements": p[8],
             "design": p[9],

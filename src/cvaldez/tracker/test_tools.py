@@ -59,6 +59,35 @@ class MyTestCase(unittest.TestCase):
 
                 self.assertEqual(len(cur.fetchall()), 0)
 
+    def test_updates_remain_with_project(self):
+        p = create_project('Updated Project', 'This is a test project')
+        p.create_update('1.0', 'New update')
+        p.create_update('1.1', 'bug fixes')
+        p.create_update('1.2', 'new features')
+
+        del p
+
+        p = Project(name='Updated Project')
+
+        try:
+            self.assertEqual(len(p.release_notes), 3)
+
+            for u in p.release_notes:
+                self.assertEqual(u.project_id, p.id)
+
+        finally:
+            with psycopg2.connect(os.getenv("DB_LINK")) as con:
+                cur = con.cursor()
+                cur.execute("DELETE FROM pst_projects WHERE id=%s", (p.id,))
+                cur.execute("SELECT * FROM pst_projects WHERE id=%s", (p.id,))
+
+                self.assertEqual(len(cur.fetchall()), 0)
+
+                cur.execute("DELETE FROM pst_updates WHERE project_id=%s", (p.id,))
+                cur.execute("SELECT * FROM pst_updates WHERE project_id=%s", (p.id,))
+
+                self.assertEqual(len(cur.fetchall()), 0)
+
 
 if __name__ == '__main__':
     unittest.main()
