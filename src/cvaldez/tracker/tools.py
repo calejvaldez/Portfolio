@@ -21,6 +21,7 @@ class Update:
         self.timestamp = info[2]
         self.description = info[3]
 
+    @staticmethod
     def create(self, project_id: str, version: str, description: str) -> 'Update':
         ...
 
