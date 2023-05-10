@@ -27,14 +27,15 @@ class Update:
         with psycopg2.connect(os.getenv('DB_LINK')) as con:
             cur = con.cursor()
 
-            cur.execute('SELECT * FROM pst_project;')
-            count = str(len(cur.fetchall()))
+            cur.execute('SELECT * FROM pst_updates;')
 
             cur.execute(
-                "INSERT INTO pst_update(project_id, version, timestamp, description) VALUES(%s, %s, %s, %s,)",
+                "INSERT INTO pst_updates(project_id, version, timestamp, description) VALUES(%s, %s, %s, %s,)",
                 (project_id, version, str(time.time()), description,))
 
             cur.commit()
+
+            cur.execute("SELECT * FROM pst_updates WHERE project_id=%s", (project_id,))
 
             return Update(*cur.fetchall()[0])
 
