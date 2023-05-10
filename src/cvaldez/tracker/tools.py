@@ -33,7 +33,7 @@ class Update:
                 "INSERT INTO pst_updates(project_id, version, timestamp, description) VALUES(%s, %s, %s, %s,)",
                 (project_id, version, str(time.time()), description,))
 
-            cur.commit()
+            con.commit()
 
             cur.execute("SELECT * FROM pst_updates WHERE project_id=%s", (project_id,))
 
@@ -67,14 +67,14 @@ class Project:
         with psycopg2.connect(os.getenv('DB_LINK')) as con:
             cur = con.cursor()
 
-            cur.execute('SELECT * FROM pst_project;')
+            cur.execute('SELECT * FROM pst_projects;')
             count = str(len(cur.fetchall()))
 
             cur.execute(
-                "INSERT INTO pst_project(name, description, id, version, last_update, link, icon, status, requirements, design, code, updates) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                (name, desc, count, None, None, None, 'building.svg', '1', None, None, None, None,))
+                "INSERT INTO pst_projects(name, description, id, version, last_updated, link, icon, status, requirements, design, code, updates) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                (name, desc, count, None, str(time.time()), None, 'building.svg', '1', None, None, None, None,))
 
-            cur.commit()
+            con.commit()
 
             return Project(count)
 
@@ -96,9 +96,9 @@ def get_project(uuid=None, name=None) -> tuple:
     with psycopg2.connect(os.getenv("DB_LINK")) as con:
         cur = con.cursor()
         if uuid:
-            cur.execute('SELECT * FROM projects WHERE uuid=%s;', (uuid,))
+            cur.execute('SELECT * FROM pst_projects WHERE id=%s;', (uuid,))
         else:
-            cur.execute('SELECT * FROM projects WHERE name=%s;', (name,))
+            cur.execute('SELECT * FROM pst_projects WHERE name=%s;', (name,))
 
         rows = cur.fetchall()
         if len(rows) == 1:
