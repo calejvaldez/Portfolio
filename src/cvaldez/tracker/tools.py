@@ -4,6 +4,7 @@
 # These are tools for the Project Status Tracker.
 import psycopg2
 import os
+import time
 
 
 class ProjectNotFoundError(Exception):
@@ -22,8 +23,20 @@ class Update:
         self.description = info[3]
 
     @staticmethod
-    def create(self, project_id: str, version: str, description: str) -> 'Update':
-        ...
+    def create(project_id: str, version: str, description: str) -> 'Update':
+        with psycopg2.connect(os.getenv('DB_LINK')) as con:
+            cur = con.cursor()
+
+            cur.execute('SELECT * FROM pst_project;')
+            count = str(len(cur.fetchall()))
+
+            cur.execute(
+                "INSERT INTO pst_update(project_id, version, timestamp, description) VALUES(%s, %s, %s, %s,)",
+                (project_id, version, str(time.time()), description,))
+
+            cur.commit()
+
+            return Update(*cur.fetchall()[0])
 
 
 class Project:
@@ -50,8 +63,19 @@ class Project:
 
     @staticmethod
     def create(name: str, desc: str) -> 'Project':
-        ... # add to database
-        return Project(...) # uuid
+        with psycopg2.connect(os.getenv('DB_LINK')) as con:
+            cur = con.cursor()
+
+            cur.execute('SELECT * FROM pst_project;')
+            count = str(len(cur.fetchall()))
+
+            cur.execute(
+                "INSERT INTO pst_project(name, description, id, version, last_update, link, icon, status, requirements, design, code, updates) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                (name, desc, count, None, None, None, 'building.svg', '1', None, None, None, None,))
+
+            cur.commit()
+
+            return Project(count)
 
 
 def create_project(name: str, description: str) -> Project:
