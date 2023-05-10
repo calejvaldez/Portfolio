@@ -16,28 +16,11 @@ class UpdateNotFoundError(Exception):
 
 
 class Update:
-    def __init__(self, info: tuple):
+    def __init__(self, *info):
         self.project_id = info[0]
         self.version = info[1]
         self.timestamp = info[2]
         self.description = info[3]
-
-    @staticmethod
-    def create(project_id: str, version: str, description: str) -> 'Update':
-        with psycopg2.connect(os.getenv('DB_LINK')) as con:
-            cur = con.cursor()
-
-            cur.execute('SELECT * FROM pst_updates;')
-
-            cur.execute(
-                "INSERT INTO pst_updates(project_id, version, timestamp, description) VALUES(%s, %s, %s, %s,)",
-                (project_id, version, str(time.time()), description,))
-
-            con.commit()
-
-            cur.execute("SELECT * FROM pst_updates WHERE project_id=%s", (project_id,))
-
-            return Update(*cur.fetchall()[0])
 
 
 class Project:
@@ -54,7 +37,7 @@ class Project:
         self.link = p[5]
         self.icon = p[6]
         self.status = p[7]
-        self.release_notes: get_updates(p[2])
+        self.release_notes: list = get_updates(p[2])
         self.process = {
             "requirements": p[8],
             "design": p[9],
@@ -77,6 +60,24 @@ class Project:
             con.commit()
 
             return Project(count)
+
+    def create_update(self, version: str, release_notes: str) -> Update:
+        with psycopg2.connect(os.getenv('DB_LINK')) as con:
+            cur = con.cursor()
+
+            cur.execute('SELECT * FROM pst_updates;')
+
+            cur.execute(
+                "INSERT INTO pst_updates(project_id, version, timestamp, description) VALUES(%s, %s, %s, %s)",
+                (self.id, version, str(time.time()), release_notes,))
+
+            con.commit()
+
+            cur.execute("SELECT * FROM pst_updates WHERE project_id=%s", (self.id,))
+
+            update = Update(*cur.fetchall()[0])
+            self.release_notes.append(update)
+            return update
 
 
 def create_project(name: str, description: str) -> Project:
@@ -116,10 +117,7 @@ def get_updates(project_id: str) -> list:
     """
     with psycopg2.connect(os.getenv('DB_LINK')) as con:
         cur = con.cursor()
-        cur.execute('SELECT * FROM pst_updates WHERE uuid=%s', (project_id,))
+        cur.execute('SELECT * FROM pst_updates WHERE project_id=%s', (project_id,))
 
         rows = cur.fetchall()
-        if len(rows) >= 1:
-            return [Update(*row) for row in rows]
-        else:
-            raise UpdateNotFoundError
+        return sorted([Update(*row) for row in rows], key=lambda u: u.timestamp)
