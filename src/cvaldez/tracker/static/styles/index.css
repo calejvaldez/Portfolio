@@ -17,3 +17,44 @@ body {
 
     line-height: 10px;
 }
+
+#projects {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.project-container {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    border-radius: 20px;
+
+    width: 250px;
+    height: 400px;
+
+    background-color: white;
+    color: black;
+
+    text-align: center;
+}
+
+.project-status-design {
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    background-color: #FF9B9B;
+    height: 50px;
+    width: 100%;
+
+    border-radius: 20px 20px 0 0;
+}
