@@ -104,5 +104,18 @@ const sample_data: Project = {
     process: {requirements: null, design: null, code: null, updates: null}
 }
 
-// Ideally, this would be a .forEach
-div_project.appendChild(buildProject(sample_data));
+let xhttp = new XMLHttpRequest();
+
+xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        let data: Array<Project> = JSON.parse(xhttp.responseText)['data'];
+
+        data.forEach((p: Project) => {
+            div_project.appendChild(buildProject(p));
+        })
+    }
+}
+
+
+xhttp.open('GET', '/api/tracker/projects/');
+xhttp.send();
