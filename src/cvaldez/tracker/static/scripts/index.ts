@@ -37,8 +37,12 @@ function buildProject(data: Project): HTMLAnchorElement {
 
     // Creating the clickable
     let a = document.createElement('a');
-    a.href = data.link;
     a.className = 'project-clickable';
+
+    if (data.link) {
+        a.href = data.link;
+    }
+    
 
     // creating the container
     let container = document.createElement('div');
