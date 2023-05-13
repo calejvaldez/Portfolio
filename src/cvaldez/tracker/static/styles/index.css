@@ -28,6 +28,8 @@ body {
 
 .project-clickable {
     text-decoration: none;
+
+    padding: 0 20px;
 }
 
 .v-desc-text {

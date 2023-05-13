@@ -5,7 +5,7 @@
 # Root: https://cvaldez.dev/api/tracker/
 
 from flask import Blueprint, request, Response
-from .tools import Project, ProjectNotFoundError
+from .tools import Project, ProjectNotFoundError, get_all_projects
 import json
 
 bp = Blueprint('tracker api', __name__,
@@ -15,7 +15,7 @@ bp = Blueprint('tracker api', __name__,
 
 
 @bp.route('/project/', methods=["GET"])
-def projects():
+def project():
     if not ("uuid" or "name" in request.headers):
         return Response({"error": "uuid or name must be in headers"}, status=400)
 
@@ -48,3 +48,18 @@ def projects():
             "status": p.status,
             "version": p.version
         }), status=200)
+
+
+@bp.route('/projects/', methods=['GET'])
+def projects():
+    return Response(json.dumps({
+        "data": [{
+            "name": p.name,
+            "description": p.description,
+            "id": p.id,
+            "status": p.status,
+            "version": p.version if p.version is not None else 'Preview',
+            "icon": p.icon,
+            "link": p.link
+        } for p in get_all_projects()]
+    }), status=200)

@@ -108,6 +108,17 @@ def get_project(uuid=None, name=None) -> tuple:
             raise ProjectNotFoundError()
 
 
+def get_all_projects() -> list[Project]:
+    with psycopg2.connect(os.getenv("DB_LINK")) as con:
+        cur = con.cursor()
+
+        cur.execute("SELECT * FROM pst_projects")
+
+        rows = cur.fetchall()
+
+        return sorted([Project(uuid=x[2]) for x in rows], key=lambda p: p.id)
+
+
 def get_updates(project_id: str) -> list:
     """
     Finds updates for a project.
