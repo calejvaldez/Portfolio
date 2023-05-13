@@ -48,12 +48,20 @@ function buildProject(data: Project): HTMLAnchorElement {
     let status = document.createElement('div')
     let status_p = document.createElement('p');
 
-    // INSERT IF STATEMENT HERE
-    // INSERT IF STATEMENT HERE
-    // INSERT IF STATEMENT HERE
+    if (data.status == '1') {
+        status.className = 'project-status-req';
+        status_p.textContent = 'Planning...';
+    } else if (data.status == '2') {
+        status.className = 'project-status-design';
+        status_p.textContent = 'Designing...';
+    } else if (data.status == '3') {
+        status.className = 'project-status-code';
+        status_p.textContent = 'Developing...';
+    } else {
+        status.className = 'project-status-done';
+        status_p.textContent = 'Maintaining';
+    }
 
-    status.className = 'project-status-design';
-    status_p.textContent = 'Developing...';
     status.appendChild(status_p);
 
     // creating image
