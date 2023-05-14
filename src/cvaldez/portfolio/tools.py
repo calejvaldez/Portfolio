@@ -1,7 +1,7 @@
-# cvaldez/tracker/tools.py
+# cvaldez/portfolio/tools.py
 # Carlos Valdez
 #
-# These are tools for the Project Status Tracker.
+# These are tools for my portfolio.
 import psycopg2
 import os
 import time

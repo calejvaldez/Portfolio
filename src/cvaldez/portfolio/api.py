@@ -1,17 +1,17 @@
-# cvaldez/tracker/api.py
+# cvaldez/portfolio/api.py
 # Carlos Valdez
 #
-# The API for the Project Status Tracker
-# Root: https://cvaldez.dev/api/tracker/
+# The API for my portfolio
+# Root: https://cvaldez.dev/api/portfolio/
 
 from flask import Blueprint, request, Response
 from .tools import Project, ProjectNotFoundError, get_all_projects
 import json
 
-bp = Blueprint('tracker api', __name__,
+bp = Blueprint('portfolio api', __name__,
                template_folder='templates',
                static_folder='static',
-               url_prefix='/api/tracker/')
+               url_prefix='/api/portfolio/')
 
 
 @bp.route('/project/', methods=["GET"])

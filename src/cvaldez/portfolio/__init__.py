@@ -1,4 +1,4 @@
-# cvaldez/tracker/__init__.py
+# cvaldez/portfolio/__init__.py
 # Carlos Valdez
 #
 # Initiates the Project Status Tracker package for the website.

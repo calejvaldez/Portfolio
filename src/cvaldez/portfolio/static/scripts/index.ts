@@ -1,7 +1,7 @@
 // index.ts
 // Carlos Valdez
 // 
-// Some tools that will be needed for the Tracker.
+// Some tools that will be needed for the portfolio.
 let div_project = document.getElementById('projects');
 
 
@@ -104,20 +104,6 @@ function buildProject(data: Project): HTMLAnchorElement {
     
 };
 
-// This is a sample of what the API would return
-const sample_data: Project = {
-    name: "Carlos' Portfolio",
-    description: "View the status of all of Carlos' projects.",
-    id: "2",
-    version: "Preview",
-    last_updated: "",
-    link: "https://cvaldez.dev/tracker/",
-    icon: "tracker.svg",
-    status: "Developing",
-    release_notes: [],
-    process: {requirements: null, design: null, code: null, updates: null}
-}
-
 let xhttp = new XMLHttpRequest();
 
 xhttp.onreadystatechange = function() {
@@ -131,5 +117,5 @@ xhttp.onreadystatechange = function() {
 }
 
 
-xhttp.open('GET', '/api/tracker/projects/');
+xhttp.open('GET', '/api/portfolio/projects/');
 xhttp.send();
