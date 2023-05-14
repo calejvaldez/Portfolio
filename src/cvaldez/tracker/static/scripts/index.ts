@@ -41,6 +41,8 @@ function buildProject(data: Project): HTMLAnchorElement {
 
     if (data.link) {
         a.href = data.link;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
     }
     
 
