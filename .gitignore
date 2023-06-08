@@ -2,3 +2,6 @@
 *.pyc
 tables.py
 index.js
+
+/src/cvaldez/portfolio/portfolio/__init__.py
+/src/cvaldez/portfolio/portfolio/project.py
