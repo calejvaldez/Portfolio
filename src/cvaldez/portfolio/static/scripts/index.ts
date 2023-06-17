@@ -87,6 +87,7 @@ function buildProject(data: Project): HTMLAnchorElement {
 
     // description
     let desc = document.createElement('p');
+    desc.className = 'actual-desc';
     desc.textContent = data.description;
 
     // finalizing
