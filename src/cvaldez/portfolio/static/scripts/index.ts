@@ -83,11 +83,7 @@ function buildProject(data: Project): HTMLAnchorElement {
     text.className = 'desc-text';
     let title = document.createElement('h3');
     title.textContent = data.name;
-    let v = document.createElement('p');
-    v.textContent = `(${data.version})`;
-    v.className = 'v-desc-text';
     text.appendChild(title);
-    text.appendChild(v);
 
     // description
     let desc = document.createElement('p');
